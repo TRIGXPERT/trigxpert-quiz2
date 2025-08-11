@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trigxpert Geometry Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      color: #222;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .quiz-box {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-width: 500px;
+      width: 100%;
+    }
+    .question {
+      font-size: 1.2em;
+      margin-bottom: 15px;
+    }
+    .option {
+      background: #e0f7fa;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .option:hover {
+      background: #b2ebf2;
+    }
+    .result {
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    .next-btn, .prev-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .next-btn:hover, .prev-btn:hover {
+      background-color: #004d40;
+    }
+    .controls {
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <h1>Trigxpert Geometry Quiz</h1>
+  <div class="quiz-box">
+    <div class="question" id="question"></div>
+    <div class="option" onclick="checkAnswer('a')" id="optA"></div>
+    <div class="option" onclick="checkAnswer('b')" id="optB"></div>
+    <div class="option" onclick="checkAnswer('c')" id="optC"></div>
+    <div class="option" onclick="checkAnswer('d')" id="optD"></div>
+    <div class="result" id="result"></div>
+    <div class="controls">
+      <button class="prev-btn" onclick="prevQuestion()" id="prevBtn">Previous</button>
+      <button class="next-btn" onclick="nextQuestion()" id="nextBtn">Next</button>
+    </div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "If x and y are the width and height of the rectangular part, which equation gives the perimeter condition?",
+        options: [
+          "x + y + (πx)/2 = 14",
+          "x + 2y + (πx)/2 = 14",
+          "x + 2y + (πx)/3 = 14",
+          "2x + 2y = 14"
+        ],
+        correct: "b"
+      },
+      {
+        question: "Express the total area A (rectangle + semicircle) in terms of x (use y from the perimeter relation).",
+        options: [
+          "A = x·y + (π x²)/8",
+          "A = 7x - x²/2 - (π x²)/8",
+          "A = x² + (π x²)/2",
+          "A = 5x + x²/2 + (π x²)/8"
+        ],
+        correct: "a"
+      },
+      {
+        question: "For maximum area, optimal x equals:",
+        options: [
+          "28 / (4 + π)",
+          "22 / (4 + π)",
+          "24 / (4 + π)",
+          "20 / (4 + π)"
+        ],
+        correct: "a"
+      },
+      {
+        question: "For that optimal x, the rectangle height y equals (choose closest expression):",
+        options: [
+          "14 / (4 + π)",
+          "10 / (4 + π)",
+          "7 / (4 + π)",
+          "5 / (2 + π)"
+        ],
+        correct: "c"
+      },
+      {
+        question: "Which expression matches the maximum total area (m²)?",
+        options: [
+          "(200 + 50π) / (4 + π)²",
+          "(180 + 45π) / (4 + π)²",
+          "(160 + 40π) / (4 + π)²",
+          "(150 + 35π) / (4 + π)²"
+        ],
+        correct: "a"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let answered = Array(quizData.length).fill(false);
+
+    function loadQuestion() {
+      const q = quizData[currentQuestion];
+      document.getElementById("question").textContent = q.question;
+      document.getElementById("optA").textContent = `a) ${q.options[0]}`;
+      document.getElementById("optB").textContent = `b) ${q.options[1]}`;
+      document.getElementById("optC").textContent = `c) ${q.options[2]}`;
+      document.getElementById("optD").textContent = `d) ${q.options[3]}`;
+      document.getElementById("result").textContent = "";
+    }
+
+    function checkAnswer(selected) {
+      const correct = quizData[currentQuestion].correct;
+      const resultBox = document.getElementById("result");
+      if (!answered[currentQuestion]) {
+        if (selected === correct) {
+          resultBox.textContent = "✅ Correct!";
+          resultBox.style.color = "green";
+          score++;
+        } else {
+          resultBox.textContent = "❌ Incorrect.";
+          resultBox.style.color = "red";
+        }
+        answered[currentQuestion] = true;
+      }
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < quizData.length) {
+        loadQuestion();
+      } else {
+        document.querySelector(".quiz-box").innerHTML = `
+          <h2>🎉 Quiz Completed!</h2>
+          <p>Your Score: ${score} / ${quizData.length}</p>
+          <button onclick="location.reload()">Restart Quiz</button>
+        `;
+      }
+    }
+
+    function prevQuestion() {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        loadQuestion();
+      }
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
